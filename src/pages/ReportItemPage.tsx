@@ -69,6 +69,14 @@ const ReportItemPage = () => {
             </div>
 
             <div className="space-y-1.5">
+              <Label htmlFor="phone">Phone Number</Label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input id="phone" type="tel" placeholder="e.g., 9876543210" value={phone} onChange={(e) => setPhone(e.target.value)} className="pl-10" required />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
               <Label>Location</Label>
               <Select value={location} onValueChange={setLocation} required>
                 <SelectTrigger>
