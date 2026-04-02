@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Phone } from "lucide-react";
 import { LOCATIONS } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
@@ -19,6 +20,7 @@ const ReportItemPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [phone, setPhone] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +66,14 @@ const ReportItemPage = () => {
             <div className="space-y-1.5">
               <Label htmlFor="desc">Description</Label>
               <Textarea id="desc" placeholder="Provide details like color, brand, distinguishing features..." value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-[100px]" required />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="phone">Phone Number</Label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input id="phone" type="tel" placeholder="e.g., 9876543210" value={phone} onChange={(e) => setPhone(e.target.value)} className="pl-10" required />
+              </div>
             </div>
 
             <div className="space-y-1.5">
