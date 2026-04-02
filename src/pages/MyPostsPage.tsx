@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapPin, Clock, MoreVertical, CheckCircle, Trash2, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { dummyItems } from "@/lib/dummy-data";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import { Item } from "@/lib/types";
+import { deleteItem, getMyItems, updateItemStatus } from "@/lib/items-api";
 
 const statusStyles = {
   lost: "bg-lost/10 text-lost border-lost/20",
@@ -17,30 +17,70 @@ const statusStyles = {
 const MyPostsPage = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [posts, setPosts] = useState<Item[]>(
-    dummyItems.filter((i) => i.contactEmail === user?.email || i.postedBy === user?.name)
-  );
+  const [posts, setPosts] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
-  // If no posts match the current user, show all for demo
-  const displayPosts = posts.length > 0 ? posts : dummyItems.slice(0, 3);
+  useEffect(() => {
+    const loadMyItems = async () => {
+      try {
+        const result = await getMyItems();
+        setPosts(result);
+      } catch {
+        setPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleMarkClaimed = (id: string) => {
-    setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, status: "claimed" } : p)));
+    void loadMyItems();
+  }, []);
+
+  const displayPosts = posts;
+
+  const handleMarkClaimed = async (id: string) => {
+    try {
+      const updated = await updateItemStatus(id, "claimed");
+      setPosts((prev) => prev.map((p) => (p.id === id ? updated : p)));
+      toast({ title: "Item marked as claimed" });
+    } catch (error) {
+      toast({
+        title: "Could not update item",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    }
     setOpenMenu(null);
-    toast({ title: "Item marked as claimed" });
   };
 
-  const handleMarkFound = (id: string) => {
-    setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, status: "found" } : p)));
+  const handleMarkFound = async (id: string) => {
+    try {
+      const updated = await updateItemStatus(id, "found");
+      setPosts((prev) => prev.map((p) => (p.id === id ? updated : p)));
+      toast({ title: "Item marked as found" });
+    } catch (error) {
+      toast({
+        title: "Could not update item",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    }
     setOpenMenu(null);
-    toast({ title: "Item marked as found" });
   };
 
-  const handleDelete = (id: string) => {
-    setPosts((prev) => prev.filter((p) => p.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteItem(id);
+      setPosts((prev) => prev.filter((p) => p.id !== id));
+      toast({ title: "Post deleted", variant: "destructive" });
+    } catch (error) {
+      toast({
+        title: "Could not delete post",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    }
     setOpenMenu(null);
-    toast({ title: "Post deleted", variant: "destructive" });
   };
 
   return (
@@ -49,7 +89,11 @@ const MyPostsPage = () => {
       <main className="container max-w-3xl py-8">
         <h1 className="text-2xl font-bold text-foreground mb-6">My Posts</h1>
 
-        {displayPosts.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground">Loading your posts...</p>
+          </div>
+        ) : displayPosts.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted-foreground mb-4">You haven't posted anything yet.</p>
             <div className="flex gap-3 justify-center">

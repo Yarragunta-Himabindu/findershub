@@ -11,10 +11,11 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (!email.endsWith("@college.edu")) {
@@ -25,9 +26,13 @@ const RegisterPage = () => {
       setError("Password must be at least 6 characters.");
       return;
     }
-    const success = register(name, email, password);
-    if (success) navigate("/dashboard");
-    else setError("Registration failed. Please try again.");
+
+    setSubmitting(true);
+    const result = await register(name, email, password);
+    setSubmitting(false);
+
+    if (result.success) navigate("/dashboard");
+    else setError(result.message || "Registration failed. Please try again.");
   };
 
   return (
@@ -73,7 +78,9 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          <Button type="submit" className="w-full">Create Account</Button>
+          <Button type="submit" className="w-full" disabled={submitting}>
+            {submitting ? "Creating account..." : "Create Account"}
+          </Button>
         </form>
 
         <p className="text-center text-sm text-muted-foreground mt-6">

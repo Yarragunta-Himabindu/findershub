@@ -11,6 +11,7 @@ export interface Item {
   postedBy: string;
   postedAt: string;
   contactEmail: string;
+  contactPhone?: string;
 }
 
 export interface Notification {

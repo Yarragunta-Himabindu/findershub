@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LOCATIONS } from "@/lib/types";
-import { dummyItems } from "@/lib/dummy-data";
+import { Item } from "@/lib/types";
+import { getItems } from "@/lib/items-api";
 import ItemCard from "@/components/ItemCard";
 import Navbar from "@/components/Navbar";
 
@@ -11,15 +12,26 @@ const BrowseItemsPage = () => {
   const [tab, setTab] = useState<"lost" | "found">("lost");
   const [search, setSearch] = useState("");
   const [locationFilter, setLocationFilter] = useState("all");
+  const [items, setItems] = useState<Item[]>([]);
 
-  const filtered = useMemo(() => {
-    return dummyItems.filter((item) => {
-      if (item.type !== tab) return false;
-      if (search && !item.title.toLowerCase().includes(search.toLowerCase()) && !item.description.toLowerCase().includes(search.toLowerCase())) return false;
-      if (locationFilter !== "all" && item.location !== locationFilter) return false;
-      return true;
-    });
+  useEffect(() => {
+    const loadItems = async () => {
+      try {
+        const result = await getItems({
+          type: tab,
+          search: search.trim() || undefined,
+          location: locationFilter,
+        });
+        setItems(result);
+      } catch {
+        setItems([]);
+      }
+    };
+
+    void loadItems();
   }, [tab, search, locationFilter]);
+
+  const filtered = useMemo(() => items, [items]);
 
   return (
     <div className="min-h-screen bg-background">

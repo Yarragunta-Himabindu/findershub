@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MapPin, Clock, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { dummyItems } from "@/lib/dummy-data";
+import { Item } from "@/lib/types";
+import { getItemById } from "@/lib/items-api";
 import Navbar from "@/components/Navbar";
 import ClaimModal from "@/components/ClaimModal";
 
@@ -16,8 +17,40 @@ const ItemDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showClaim, setShowClaim] = useState(false);
+  const [item, setItem] = useState<Item | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const item = dummyItems.find((i) => i.id === id);
+  useEffect(() => {
+    const loadItem = async () => {
+      if (!id) {
+        setItem(null);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const result = await getItemById(id);
+        setItem(result);
+      } catch {
+        setItem(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void loadItem();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container py-16 text-center">
+          <p className="text-muted-foreground">Loading item...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!item) {
     return (

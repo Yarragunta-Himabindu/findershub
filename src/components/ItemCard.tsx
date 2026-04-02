@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Clock } from "lucide-react";
+import { MapPin, Clock, Phone } from "lucide-react";
 import { Item } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 
@@ -12,8 +12,10 @@ const statusStyles = {
 const ItemCard = ({ item }: { item: Item }) => {
   const timeAgo = (date: string) => {
     const diff = Date.now() - new Date(date).getTime();
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.floor(diff / 3600000);
-    if (hours < 1) return "Just now";
     if (hours < 24) return `${hours}h ago`;
     const days = Math.floor(hours / 24);
     return `${days}d ago`;
@@ -51,6 +53,12 @@ const ItemCard = ({ item }: { item: Item }) => {
             {timeAgo(item.postedAt)}
           </span>
         </div>
+        {item.contactPhone && (
+          <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
+            <Phone className="h-3 w-3" />
+            {item.contactPhone}
+          </div>
+        )}
       </div>
     </Link>
   );

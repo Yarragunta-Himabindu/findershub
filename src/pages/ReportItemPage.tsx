@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Phone } from "lucide-react";
 import { LOCATIONS } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
+import { createItem } from "@/lib/items-api";
 import Navbar from "@/components/Navbar";
 import { Upload, ArrowLeft } from "lucide-react";
 
@@ -22,23 +23,55 @@ const ReportItemPage = () => {
   const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 4 * 1024 * 1024) {
+        toast({
+          title: "Image too large",
+          description: "Please upload an image smaller than 4MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: `${isLost ? "Lost" : "Found"} item reported!`,
-      description: `Your ${isLost ? "lost" : "found"} item "${title}" has been posted successfully.`,
-    });
-    navigate("/my-posts");
+    if (!type || (type !== "lost" && type !== "found")) return;
+
+    setSubmitting(true);
+    try {
+      await createItem({
+        title,
+        description,
+        location,
+        type,
+        imageUrl: imagePreview || undefined,
+        contactPhone: phone,
+      });
+
+      toast({
+        title: `${isLost ? "Lost" : "Found"} item reported!`,
+        description: `Your ${isLost ? "lost" : "found"} item "${title}" has been posted successfully.`,
+      });
+      navigate("/my-posts");
+    } catch (error) {
+      toast({
+        title: "Failed to submit report",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -106,8 +139,8 @@ const ReportItemPage = () => {
               </label>
             </div>
 
-            <Button type="submit" className="w-full" disabled={!title || !description || !location}>
-              Submit Report
+            <Button type="submit" className="w-full" disabled={!title || !description || !location || submitting}>
+              {submitting ? "Submitting..." : "Submit Report"}
             </Button>
           </form>
         </div>
