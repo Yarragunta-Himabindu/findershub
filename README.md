@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+
+Your local content
+
+GitHub content
+<!-- 
 # FindersHub
 
 FindersHub is a campus lost-and-found app built with Vite + React.
@@ -34,3 +40,6 @@ This starts:
 - `POST /api/auth/login`
 - `GET /api/auth/me`
 - `GET /api/health`
+======= -->
+# findershub
+>>>>>>> dffe9dac48e8ff64d6da627a387d14605aec8d8c
