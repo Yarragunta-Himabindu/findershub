@@ -18,8 +18,9 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!email.endsWith("@college.edu")) {
-      setError("Only college email addresses (@college.edu) are allowed.");
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail.endsWith("@srit.ac.in")) {
+      setError("Only college email addresses (@srit.ac.in) are allowed.");
       return;
     }
     if (password.length < 6) {
@@ -66,7 +67,7 @@ const RegisterPage = () => {
             <Label htmlFor="email">College Email</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input id="email" type="email" placeholder="you@college.edu" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" required />
+              <Input id="email" type="email" placeholder="you@srit.ac.in" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" required />
             </div>
           </div>
 

@@ -74,12 +74,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string): Promise<AuthResult> => {
     try {
+      const normalizedEmail = email.trim().toLowerCase();
       const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: normalizedEmail, password }),
       });
 
       const data = (await response.json()) as {
@@ -106,12 +107,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     password: string,
   ): Promise<AuthResult> => {
     try {
+      const normalizedEmail = email.trim().toLowerCase();
+      const trimmedName = name.trim();
       const response = await fetch(`${apiBaseUrl}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name: trimmedName, email: normalizedEmail, password }),
       });
 
       const data = (await response.json()) as {

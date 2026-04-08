@@ -17,8 +17,9 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!email.endsWith("@college.edu")) {
-      setError("Please use your college email (@college.edu)");
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail.endsWith("@srit.ac.in")) {
+      setError("Please use your college email (@srit.ac.in)");
       return;
     }
     if (password.length < 4) {
@@ -60,7 +61,7 @@ const LoginPage = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@college.edu"
+                placeholder="you@srit.ac.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="pl-10"

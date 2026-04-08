@@ -11,7 +11,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
     postedBy: "Rahul Sharma",
     postedAt: "2026-04-01T10:30:00Z",
-    contactEmail: "rahul@college.edu",
+    contactEmail: "rahul@srit.ac.in",
   },
   {
     id: "2",
@@ -23,7 +23,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=300&fit=crop",
     postedBy: "Priya Patel",
     postedAt: "2026-04-01T14:15:00Z",
-    contactEmail: "priya@college.edu",
+    contactEmail: "priya@srit.ac.in",
   },
   {
     id: "3",
@@ -35,7 +35,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=300&fit=crop",
     postedBy: "Amit Kumar",
     postedAt: "2026-03-31T09:00:00Z",
-    contactEmail: "amit@college.edu",
+    contactEmail: "amit@srit.ac.in",
   },
   {
     id: "4",
@@ -47,7 +47,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=300&fit=crop",
     postedBy: "Sneha Reddy",
     postedAt: "2026-03-31T16:45:00Z",
-    contactEmail: "sneha@college.edu",
+    contactEmail: "sneha@srit.ac.in",
   },
   {
     id: "5",
@@ -59,7 +59,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=300&fit=crop",
     postedBy: "Vikram Singh",
     postedAt: "2026-03-30T11:20:00Z",
-    contactEmail: "vikram@college.edu",
+    contactEmail: "vikram@srit.ac.in",
   },
   {
     id: "6",
@@ -71,7 +71,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop",
     postedBy: "Ananya Gupta",
     postedAt: "2026-03-30T08:10:00Z",
-    contactEmail: "ananya@college.edu",
+    contactEmail: "ananya@srit.ac.in",
   },
   {
     id: "7",
@@ -83,7 +83,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop",
     postedBy: "Karan Mehta",
     postedAt: "2026-03-29T13:30:00Z",
-    contactEmail: "karan@college.edu",
+    contactEmail: "karan@srit.ac.in",
   },
   {
     id: "8",
@@ -95,7 +95,7 @@ export const dummyItems: Item[] = [
     imageUrl: "https://images.unsplash.com/photo-1574258495973-f7977603b6d2?w=400&h=300&fit=crop",
     postedBy: "Divya Nair",
     postedAt: "2026-03-29T17:00:00Z",
-    contactEmail: "divya@college.edu",
+    contactEmail: "divya@srit.ac.in",
   },
 ];
 
@@ -108,5 +108,5 @@ export const dummyNotifications: Notification[] = [
 
 export const currentUser = {
   name: "Rahul Sharma",
-  email: "rahul@college.edu",
+  email: "rahul@srit.ac.in",
 };

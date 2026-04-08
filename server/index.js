@@ -133,15 +133,16 @@ app.get("/api/health", (_req, res) => {
 
 app.post("/api/auth/register", async (req, res) => {
   const { name, email, password } = req.body ?? {};
-  const normalizedEmail = typeof email === "string" ? email.toLowerCase() : "";
+  const trimmedName = typeof name === "string" ? name.trim() : "";
+  const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
   const derivedRollNumber = normalizedEmail.replace(/[^a-z0-9]/g, "_");
 
-  if (!name || !email || !password) {
+  if (!trimmedName || !normalizedEmail || !password) {
     return res.status(400).json({ message: "Name, email, and password are required" });
   }
 
-  if (!email.endsWith("@college.edu")) {
-    return res.status(400).json({ message: "Only college email addresses are allowed" });
+  if (!normalizedEmail.endsWith("@srit.ac.in")) {
+    return res.status(400).json({ message: "Only college email addresses (@srit.ac.in) are allowed" });
   }
 
   if (password.length < 6) {
